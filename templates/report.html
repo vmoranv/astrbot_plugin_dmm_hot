@@ -1,0 +1,258 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Ranking List</title>
+    <style>
+        :root {
+            --bg-body: #f3f4f6;
+            --bg-card: #ffffff;
+            --text-main: #1f2937;
+            --text-sub: #6b7280;
+            --accent-color: #ec4899;
+            --shadow-card: 0 8px 16px rgba(0,0,0,0.06);
+            --tag-bg: #fdf2f8;
+            --tag-text: #db2777;
+            --rank-bg-default: #e5e7eb;
+        }
+
+        /* 基础重置 */
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+
+        body {
+            font-family: 'Source Han Sans', sans-serif;
+            background-color: var(--bg-body);
+            color: var(--text-main);
+            display: flex;
+            justify-content: center;
+            min-height: 100vh;
+            padding: 30px 15px;
+            /* 字体抗锯齿优化 */
+            -webkit-font-smoothing: antialiased;
+        }
+
+        .container {
+            width: 100%;
+            max-width: 500px; /* 稍微收窄一点，更精致 */
+        }
+
+        /* 标题区域 */
+        .header {
+            margin-bottom: 30px;
+            padding-left: 5px;
+            border-left: 4px solid var(--accent-color);
+        }
+
+        .header h1 {
+            font-size: 22px;
+            font-weight: 700;
+            letter-spacing: 0.5px;
+            line-height: 1;
+        }
+
+        .header span {
+            font-size: 12px;
+            color: var(--text-sub);
+            margin-top: 6px;
+            display: block;
+            font-weight: 300;
+        }
+
+        /* 卡片主体 */
+        .card {
+            display: flex;
+            background-color: var(--bg-card);
+            border-radius: 16px;
+            margin-bottom: 20px;
+            box-shadow: var(--shadow-card);
+            position: relative;
+            overflow: hidden;
+            height: 140px; /* 固定高度，确保整齐 */
+            transition: transform 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
+        }
+
+        .card:active {
+            transform: scale(0.98);
+        }
+
+        /* 左侧封面图 */
+        .card-img-wrapper {
+            /* 【修改点 2】设置宽度以匹配 7:10 比例 */
+            /* 高度 140px * 0.7 = 98px */
+            width: 98px;
+
+            flex-shrink: 0;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .card-img {
+            width: 100%;
+            height: 100%;
+            /* 【修改点 3】保持图片填充并右对齐 */
+            object-fit: cover;
+            object-position: right top; /* 强制显示右侧封面，裁剪左侧 */
+            display: block;
+        }
+
+        /* 排名徽章系统 */
+        .rank-badge {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 32px;
+            height: 32px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 800;
+            font-size: 14px;
+            color: #fff;
+            border-bottom-right-radius: 12px;
+            z-index: 2;
+            box-shadow: 2px 2px 5px rgba(0,0,0,0.3);
+        }
+
+        /* 排名颜色定义 */
+        .rank-1 .rank-badge {
+            background: linear-gradient(135deg, #FFD700, #FDB931);
+            color: #5d4037;
+            width: 40px; height: 40px; font-size: 18px; /* 第一名大一点 */
+        }
+        .rank-2 .rank-badge {
+            background: linear-gradient(135deg, #E0E0E0, #BDBDBD);
+            color: #424242;
+        }
+        .rank-3 .rank-badge {
+            background: linear-gradient(135deg, #CD7F32, #A1662F);
+        }
+        /* 4名以后 */
+        .rank-other .rank-badge {
+            background-color: var(--rank-bg-default);
+            color: var(--text-sub);
+            font-weight: 600;
+            font-size: 12px;
+        }
+
+        /* 右侧内容区 */
+        .card-content {
+            padding: 12px 16px;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            flex: 1;
+            min-width: 0; /* 防止flex子项溢出 */
+        }
+
+        .title {
+            font-size: 14px;
+            font-weight: 500;
+            line-height: 1.5;
+            color: var(--text-main);
+
+            /* 限制显示2行 */
+            display: -webkit-box;
+            -webkit-line-clamp: 4;
+            -webkit-box-orient: vertical;
+            overflow: hidden;
+            margin-bottom: 4px;
+        }
+
+        /* 装饰线 */
+        .divider {
+            width: 20px;
+            height: 2px;
+            background-color: var(--accent-color);
+            margin-bottom: auto; /* 将下方内容推到底部 */
+            opacity: 0.6;
+        }
+
+        .meta-info {
+            display: flex;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 6px;
+        }
+
+        .actress-pill {
+            display: inline-flex;
+            align-items: center;
+            background-color: var(--tag-bg);
+            color: var(--tag-text);
+            font-size: 11px;
+            padding: 4px 10px;
+            border-radius: 20px;
+            font-weight: 500;
+            letter-spacing: 0.5px;
+        }
+
+        .actress-pill.unknown {
+            background-color: rgba(255,255,255,0.05);
+            color: var(--text-sub);
+            border: 1px solid rgba(255,255,255,0.1);
+        }
+        .movie-id {
+            font-family: 'Roboto Mono', monospace; /* 等宽字体 */
+            font-size: 11px;
+            color: var(--id-color);
+            opacity: 0.8;
+            margin-bottom: 6px;
+            display: flex;
+            align-items: center;
+            letter-spacing: 0.5px;
+            text-transform: uppercase; /* 强制大写，更整齐 */
+        }
+        .movie-id::before {
+            content: '#';
+            margin-right: 2px;
+            opacity: 0.5;
+        }
+        .footer {
+            text-align: center;
+            margin-top: 40px;
+            padding-bottom: 20px;
+            font-size: 11px;
+            color: var(--text-sub);
+            letter-spacing: 1px;
+            opacity: 0.5;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>DMM{{term}} TOP {{ dmm_list|length }}</h1>
+            <span>{{ date }}</span>
+        </div>
+
+        {% for item in dmm_list %}
+        <div class="card {% if item.rank|int == 1 %}rank-1{% elif item.rank|int == 2 %}rank-2{% elif item.rank|int == 3 %}rank-3{% else %}rank-other{% endif %}">
+
+            <div class="card-img-wrapper">
+                <div class="rank-badge">{{ item.rank }}</div>
+                <img src="{{ item.cover_url }}" class="card-img" alt="cover" loading="lazy">
+            </div>
+
+            <div class="card-content">
+                <div class="title">{{ item.title }}</div>
+                <div class="movie-id">{{ item.jav_id }}</div>
+                <div class="divider"></div>
+                <div class="meta-info">
+                    {% for performer in item.performers %}
+                        {% if performer == "未公开/未知" or performer == "----" or performer == "未找到出演者" %}
+                             <span class="actress-pill unknown">未知</span>
+                        {% else %}
+                             <span class="actress-pill">{{ performer }}</span>
+                        {% endif %}
+                    {% endfor %}
+                </div>
+            </div>
+        </div>
+        {% endfor %}
+
+        <div class="footer">数据来自DMM</div>
+    </div>
+
+</body>
+</html>
