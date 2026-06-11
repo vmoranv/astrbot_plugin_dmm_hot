@@ -11,98 +11,84 @@
             --text-main: #1f2937;
             --text-sub: #6b7280;
             --accent-color: #ec4899;
-            --shadow-card: 0 8px 16px rgba(0,0,0,0.06);
+            --shadow-card: 0 4px 12px rgba(0,0,0,0.08);
             --tag-bg: #fdf2f8;
             --tag-text: #db2777;
             --rank-bg-default: #e5e7eb;
         }
 
-        /* 基础重置 */
         * { box-sizing: border-box; margin: 0; padding: 0; }
 
         body {
-            font-family: 'Source Han Sans', sans-serif;
+            font-family: 'Source Han Sans', 'PingFang SC', 'Microsoft YaHei', sans-serif;
             background-color: var(--bg-body);
             color: var(--text-main);
             display: flex;
             justify-content: center;
             min-height: 100vh;
-            padding: 30px 15px;
-            /* 字体抗锯齿优化 */
+            padding: 40px 20px;
             -webkit-font-smoothing: antialiased;
         }
 
         .container {
             width: 100%;
-            max-width: 700px; /* 稍微收窄一点，更精致 */
+            max-width: 1200px;
         }
 
-        /* 标题区域 */
         .header {
-            margin-bottom: 30px;
-            padding-left: 5px;
-            border-left: 4px solid var(--accent-color);
+            margin-bottom: 32px;
+            padding-left: 16px;
+            border-left: 5px solid var(--accent-color);
         }
 
         .header h1 {
-            font-size: 22px;
+            font-size: 28px;
             font-weight: 700;
             letter-spacing: 0.5px;
-            line-height: 1;
+            line-height: 1.2;
         }
 
         .header span {
-            font-size: 12px;
+            font-size: 14px;
             color: var(--text-sub);
-            margin-top: 6px;
+            margin-top: 8px;
             display: block;
             font-weight: 300;
         }
 
-        /* 卡片主体 */
         .card {
             display: flex;
             background-color: var(--bg-card);
-            border-radius: 16px;
-            margin-bottom: 20px;
+            border-radius: 14px;
+            margin-bottom: 16px;
             box-shadow: var(--shadow-card);
             position: relative;
             overflow: hidden;
-            height: 140px; /* 固定高度，确保整齐 */
-            transition: transform 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
+            height: 150px;
         }
 
-        .card:active {
-            transform: scale(0.98);
-        }
-
-        /* 左侧封面图 */
         .card-img-wrapper {
-            /* 【修改点 2】设置宽度以匹配 7:10 比例 */
-            /* 高度 140px * 0.7 = 98px */
-            width: 98px;
-
+            width: 105px;
             flex-shrink: 0;
             position: relative;
             overflow: hidden;
+            background-color: #f0f0f0;
         }
 
         .card-img {
             width: 100%;
             height: 100%;
-            /* 【修改点 3】保持图片填充并右对齐 */
             object-fit: cover;
-            object-position: right top; /* 强制显示右侧封面，裁剪左侧 */
+            object-position: right top;
             display: block;
         }
 
-        /* 排名徽章系统 */
         .rank-badge {
             position: absolute;
             top: 0;
             left: 0;
-            width: 32px;
-            height: 32px;
+            width: 34px;
+            height: 34px;
             display: flex;
             align-items: center;
             justify-content: center;
@@ -111,14 +97,13 @@
             color: #fff;
             border-bottom-right-radius: 12px;
             z-index: 2;
-            box-shadow: 2px 2px 5px rgba(0,0,0,0.3);
+            box-shadow: 2px 2px 5px rgba(0,0,0,0.25);
         }
 
-        /* 排名颜色定义 */
         .rank-1 .rank-badge {
             background: linear-gradient(135deg, #FFD700, #FDB931);
             color: #5d4037;
-            width: 40px; height: 40px; font-size: 18px; /* 第一名大一点 */
+            width: 42px; height: 42px; font-size: 18px;
         }
         .rank-2 .rank-badge {
             background: linear-gradient(135deg, #E0E0E0, #BDBDBD);
@@ -127,7 +112,6 @@
         .rank-3 .rank-badge {
             background: linear-gradient(135deg, #CD7F32, #A1662F);
         }
-        /* 4名以后 */
         .rank-other .rank-badge {
             background-color: var(--rank-bg-default);
             color: var(--text-sub);
@@ -135,44 +119,41 @@
             font-size: 12px;
         }
 
-        /* 右侧内容区 */
         .card-content {
-            padding: 12px 16px;
+            padding: 14px 20px;
             display: flex;
             flex-direction: column;
             justify-content: space-between;
             flex: 1;
-            min-width: 0; /* 防止flex子项溢出 */
+            min-width: 0;
         }
 
         .title {
-            font-size: 14px;
+            font-size: 15px;
             font-weight: 500;
             line-height: 1.5;
             color: var(--text-main);
-
-            /* 限制显示2行 */
             display: -webkit-box;
-            -webkit-line-clamp: 4;
+            -webkit-line-clamp: 2;
             -webkit-box-orient: vertical;
             overflow: hidden;
             margin-bottom: 4px;
         }
 
-        /* 装饰线 */
         .divider {
-            width: 20px;
-            height: 2px;
+            width: 24px;
+            height: 3px;
             background-color: var(--accent-color);
-            margin-bottom: auto; /* 将下方内容推到底部 */
-            opacity: 0.6;
+            margin-bottom: auto;
+            opacity: 0.5;
+            border-radius: 2px;
         }
 
         .meta-info {
             display: flex;
             align-items: center;
             flex-wrap: wrap;
-            gap: 6px;
+            gap: 8px;
         }
 
         .actress-pill {
@@ -180,42 +161,45 @@
             align-items: center;
             background-color: var(--tag-bg);
             color: var(--tag-text);
-            font-size: 11px;
-            padding: 4px 10px;
+            font-size: 12px;
+            padding: 4px 12px;
             border-radius: 20px;
             font-weight: 500;
             letter-spacing: 0.5px;
         }
 
         .actress-pill.unknown {
-            background-color: rgba(255,255,255,0.05);
+            background-color: #f0f0f0;
             color: var(--text-sub);
-            border: 1px solid rgba(255,255,255,0.1);
+            border: 1px solid #e0e0e0;
         }
+
         .movie-id {
-            font-family: 'Roboto Mono', monospace; /* 等宽字体 */
-            font-size: 11px;
-            color: var(--id-color);
+            font-family: 'Roboto Mono', 'Courier New', monospace;
+            font-size: 12px;
+            color: var(--text-sub);
             opacity: 0.8;
             margin-bottom: 6px;
             display: flex;
             align-items: center;
             letter-spacing: 0.5px;
-            text-transform: uppercase; /* 强制大写，更整齐 */
+            text-transform: uppercase;
         }
+
         .movie-id::before {
             content: '#';
-            margin-right: 2px;
-            opacity: 0.5;
+            margin-right: 3px;
+            opacity: 0.4;
         }
+
         .footer {
             text-align: center;
-            margin-top: 40px;
-            padding-bottom: 20px;
-            font-size: 11px;
+            margin-top: 48px;
+            padding-bottom: 24px;
+            font-size: 12px;
             color: var(--text-sub);
             letter-spacing: 1px;
-            opacity: 0.5;
+            opacity: 0.4;
         }
     </style>
 </head>
