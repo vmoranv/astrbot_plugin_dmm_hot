@@ -1,6 +1,6 @@
 name: astrbot_plugin_dmm_hot
 display_name: DMM热榜
 desc: DMM热榜
-version: v1.0.0
+version: v1.0.1
 author: Kazuki # 作者
 repo: https://github.com/zhoufan47/astrbot_plugin_dmm_hot
